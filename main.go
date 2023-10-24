@@ -238,10 +238,17 @@ func main() {
 
 	var err error
 	sid, err = get_sid(username, password)
-	if err != nil {
-		fmt.Println(err)
-		return
+
+	var trys int = 0
+
+	for err != nil {
+		// подождать 10 секунд
+		trys++
+		fmt.Printf("Попытка подключения к серверу %d\n", trys)
+		time.Sleep(30 * time.Second)
+		sid, err = get_sid(username, password)
 	}
+	fmt.Println("Подключение к серверу прошло успешно")
 
 	trCollector := newtrCollector()
 	prometheus.Unregister(prometheus.NewGoCollector())
